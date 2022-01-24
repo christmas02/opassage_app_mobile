@@ -4,10 +4,12 @@ import 'package:opassage_app/Page/Inscription/inscription.dart';
 import 'package:opassage_app/Page/Inscription/professionnel.dart';
 import 'package:opassage_app/Page/Professionnel/ListeEspace.dart';
 import 'package:opassage_app/Page/Professionnel/ListeReservation.dart';
+import 'package:opassage_app/Page/Professionnel/ajoutEspace.dart';
 import 'package:opassage_app/Page/Professionnel/ajoutespaceHuredetaille.dart';
 import 'package:opassage_app/Page/Professionnel/scancode.dart';
 import 'package:opassage_app/Page/Professionnel/walletbanque.dart';
 import 'package:opassage_app/Page/modif_profil.dart';
+import 'package:opassage_app/Page/password_update.dart';
 import 'package:opassage_app/main.dart';
 import 'package:opassage_app/utilities/color.dart';
 
@@ -32,7 +34,8 @@ class _ProfilState extends State<Profil> {
       id = localStorage.getInt('id');
       role = localStorage.getInt('role');
     });
-    print(role);
+    print('-------id------');
+    print(id);
   }
 
   void initState() {
@@ -86,14 +89,14 @@ class _ProfilState extends State<Profil> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      'Cocody lycée technique',
+                                      '',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     SizedBox(
                                       height: 30,
                                     ),
                                     Text(
-                                      '+225 000000',
+                                      '',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     SizedBox(
@@ -219,6 +222,25 @@ class _ProfilState extends State<Profil> {
                           ),
                           GestureDetector(
                             onTap: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PasswordUpdate()));
+                            },
+                            child: Container(
+                              width: 1000,
+                              child: Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  'Modifier mots de passe',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              )),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
                               SharedPreferences localStorage =
                                   await SharedPreferences.getInstance();
                               setState(() {
@@ -245,6 +267,111 @@ class _ProfilState extends State<Profil> {
                       ),
                     )
                   : Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            color: Colors.deepPurple,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Container() // Text('image'),
+                                    ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      name,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      'Cocody lycée technique',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Text(
+                                      '+225 000000',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Modif_profil()));
+                                    },
+                                    icon: Icon(Icons.edit))
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 20, top: 15),
+                            child: Text(
+                              'Menus',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PasswordUpdate()));
+                            },
+                            child: Container(
+                              width: 1000,
+                              child: Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  'Modifier mots de passe',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              )),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              SharedPreferences localStorage =
+                                  await SharedPreferences.getInstance();
+                              setState(() {
+                                localStorage.clear();
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyHomePage()));
+                            },
+                            child: Container(
+                              width: 1000,
+                              child: Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  'Deconnexion',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              )),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+
+              /*premier profil  Container(
                       width: MediaQuery.of(context).size.height / 2,
                       height: MediaQuery.of(context).size.height,
                       color: violet,
@@ -252,13 +379,31 @@ class _ProfilState extends State<Profil> {
                         padding: EdgeInsets.all(10),
                         child: Column(
                           children: [
-                            Image.asset(name),
                             Text(
                               name,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                () {};
+                                child:
+                                Container(
+                                  child: Container(
+                                    width: 1000,
+                                    child: Card(
+                                        child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Text(
+                                        'Modification mots de passe',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    )),
+                                  ),
+                                );
+                              },
                             ),
                             GestureDetector(
                               onTap: () async {
@@ -286,8 +431,8 @@ class _ProfilState extends State<Profil> {
                             )
                           ],
                         ),
-                      )),
-            )
+                      )) */
+              )
           : Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

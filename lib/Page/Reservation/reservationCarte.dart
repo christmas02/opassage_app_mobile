@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:opassage_app/api/lienglobal.dart';
 import 'package:opassage_app/main.dart';
 import 'package:opassage_app/utilities/color.dart';
 
@@ -29,27 +30,8 @@ class ReservationDepuisCarte extends StatefulWidget {
 }
 
 class _ReservationDepuisCarteState extends State<ReservationDepuisCarte> {
-  var name;
-  var id;
-  var role;
-  var email;
-  var _telephonecontroller = TextEditingController();
-  var h;
-  var s;
-  var cout;
-  data() async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    setState(() {
-      name = localStorage.getString('name');
-      id = localStorage.getInt('id');
-      role = localStorage.getInt('role');
-      email = localStorage.getString('email');
-    });
-    print(role);
-  }
-
+  int currentStep = 0;
   int _activeStepIndex = 0;
-  var point;
 
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
@@ -65,67 +47,71 @@ class _ReservationDepuisCarteState extends State<ReservationDepuisCarte> {
   var heurearrive;
   var heuredepart;
 
-  //Reservation
+  var name;
+  var id;
+  var role;
+  var email;
+  var _telephonecontroller = TextEditingController();
+  var h;
+  var s;
+  var cout;
 
-  Reservation() async {
-    var dio = Dio();
-    var w = h - s;
-    var data = [
-      {
-        'matricule_espace': widget.matricule,
-        'date_reservation': datechoisi,
-        'heure_debut': _selectedTime2,
-        'heure_fin': _selectedTime,
-        'montant': cout,
-        'statu': 0,
-        'id_user_imei': "1",
-        'phone_anonym': _telephonecontroller.text,
-      }
-    ];
+  Future<void> _show() async {
+    final TimeOfDay? result =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (result != null) {
+      setState(() {
+        _selectedTime = result.hour.toString() + ':' + result.minute.toString();
+        h = int.parse(result.hour.toString());
 
-    try {
-      final response = await dio.post(
-          'http://opassage.impactafric.com/api/save_reservation',
-          data: data);
-      p();
-      //  if (response.data['statu'] == 1) {}
-    } catch (e) {
-      showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 100,
-              color: Colors.red,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text(
-                      'reservation echoué',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          });
+        cout = int.parse(widget.montant) * (h - s);
+        print(cout);
+      });
     }
-
-    print(data);
   }
 
-  void initState() {
-    super.initState();
-    /* _show();
-    _showq(); */
-    data();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          'Réservation',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Stepper(
+        currentStep: currentStep,
+        type: StepperType.horizontal,
+        steps: getSteps(),
+        onStepTapped: (step) => setState(() => currentStep = step),
+        onStepContinue: () {
+          final isLaStep = currentStep == getSteps().length - 1;
+          if (isLaStep) {
+            // remplir();
+            Reservation();
+            print('completed');
+          } else {
+            setState(() => currentStep += 1);
+          }
+          ;
+        },
+        onStepCancel: () {
+          currentStep == 0 ? null : setState(() => currentStep -= 1);
+        },
+      ),
+    );
   }
 
-  TextEditingController _eventController = TextEditingController();
-  List<Step> stepList() => [
+  List<Step> getSteps() => [
         Step(
+            state: currentStep > 1 ? StepState.complete : StepState.indexed,
             isActive: _activeStepIndex >= 0,
             title: Text(''),
             content: Center(
@@ -261,7 +247,15 @@ class _ReservationDepuisCarteState extends State<ReservationDepuisCarte> {
                 ],
               ),
             )),
+        /* Step(
+          state: currentStep > 1 ? StepState.complete : StepState.indexed,
+          isActive: _activeStepIndex >= 1,
+          title: Text(''),
+          content: Text('fff'),
+        ) */
+
         Step(
+            state: currentStep > 1 ? StepState.complete : StepState.indexed,
             isActive: _activeStepIndex >= 1,
             title: Text(''),
             content: Center(
@@ -498,8 +492,19 @@ class _ReservationDepuisCarteState extends State<ReservationDepuisCarte> {
                                   padding: EdgeInsets.only(right: 20, left: 20),
                                   child: Column(
                                     children: [
-                                      Text('${widget.montant} * ${(h - s)}'),
-                                      Text('Frais 0.00')
+                                      Row(
+                                        children: [
+                                          s == null
+                                              ? Container()
+                                              : Text('${(h - s)}'),
+                                          SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text('${widget.montant}'),
+                                        ],
+                                      )
+                                      //  Text('${widget.montant} * ${(h - s)}'),
+                                      // Text('Frais 0.00')
                                     ],
                                   ),
                                 ),
@@ -558,144 +563,7 @@ class _ReservationDepuisCarteState extends State<ReservationDepuisCarte> {
                 ],
               ),
             )),
-        /*    Step(
-            isActive: _activeStepIndex >= 2,
-            title: Text(''),
-            content: Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Processus de paiement',
-                    style: TextStyle(fontSize: 20),
-                  )
-                ],
-              ),
-            )) */
       ];
-
-  p() {
-    CoolAlert.show(
-        context: context,
-        type: CoolAlertType.success,
-        text: "Réservation effectuée!",
-        onConfirmBtnTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyHomePage()),
-          );
-        });
-  }
-
-  @override
-  void dispose() {
-    _telephonecontroller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Réservation',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: Theme(
-          data: ThemeData(
-              accentColor: Colors.purple,
-              primarySwatch: Colors.purple,
-              colorScheme: ColorScheme.light(primary: Colors.purple)),
-          child: Stepper(
-              currentStep: _activeStepIndex,
-              type: StepperType.horizontal,
-              elevation: 0,
-              onStepContinue: () {
-                if (_activeStepIndex < (stepList().length - 1)) {
-                  setState(() {
-                    _activeStepIndex += 1;
-                  });
-                }
-              },
-              onStepCancel: () {
-                if (_activeStepIndex == 0) {
-                  return;
-                }
-
-                setState(() {
-                  _activeStepIndex -= 1;
-                });
-              },
-              onStepTapped: (int index) {
-                setState(() {
-                  _activeStepIndex = index;
-                });
-              },
-              controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-                final isLasStep = _activeStepIndex == stepList().length - 1;
-
-                return Container(
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: /* ElevatedButton(
-                    onPressed: onStepContinue,
-                    child:
-                        (isLasStep) ? const Text('valider') : Text('suivant'),
-                  ) */
-                              Container(
-                        margin: EdgeInsets.all(10),
-                        height: 50.0,
-                        width: 500,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          onPressed: (isLasStep)
-                              ? () {
-                                  Reservation();
-                                  // p();
-                                }
-                              : onStepContinue,
-                          padding: EdgeInsets.all(10.0),
-                          color: violet,
-                          textColor: Color.fromRGBO(255, 255, 255, 1),
-                          child: (isLasStep)
-                              ? const Text('Valider')
-                              : Text('Suivant'),
-                        ),
-                      )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
-                );
-              },
-              steps: stepList())),
-    );
-  }
-
-  Future<void> _show() async {
-    final TimeOfDay? result =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    if (result != null) {
-      setState(() {
-        _selectedTime = result.hour.toString() + ':' + result.minute.toString();
-        h = int.parse(result.hour.toString());
-
-        cout = int.parse(widget.montant) * (h - s);
-        print(cout);
-      });
-    }
-  }
 
   Future<void> _showq() async {
     final TimeOfDay? result =
@@ -709,5 +577,67 @@ class _ReservationDepuisCarteState extends State<ReservationDepuisCarte> {
         //cout = widget.montant * (h - s);
       });
     }
+  }
+
+  Reservation() async {
+    var dio = Dio();
+    var w = h - s;
+    var data = [
+      {
+        'matricule_espace': widget.matricule,
+        'date_reservation': datechoisi,
+        'heure_debut': _selectedTime2,
+        'heure_fin': _selectedTime,
+        'montant': cout,
+        'statu': 0,
+        'id_user_imei': "1",
+        'phone_anonym': _telephonecontroller.text,
+      }
+    ];
+
+    try {
+      final response = await dio.post('${lien}/save_reservation', data: data);
+      p();
+      //  if (response.data['statu'] == 1) {}
+    } catch (e) {
+      print(e);
+      /*  showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 100,
+              color: Colors.red,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(
+                      'reservation echoué',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }) */
+      ;
+    }
+
+    print(data);
+  }
+
+  p() {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        text: "Réservation effectuée!",
+        onConfirmBtnTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyHomePage()),
+          );
+        });
   }
 }

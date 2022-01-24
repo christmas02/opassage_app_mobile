@@ -1,15 +1,15 @@
 class ResultatRecherche {
   int? id;
-  int? idUser;
-  int? matricule;
+  String? idUser;
+  String? matricule;
   String? designation;
   String? description;
   String? localisation;
   String? commune;
   String? longitude;
   String? latitude;
-  int? disponibilite;
-  int? type;
+  String? disponibilite;
+  String? type;
   String? pathUn;
   String? pathDeux;
   String? pathTrois;
@@ -38,7 +38,7 @@ class ResultatRecherche {
 
   ResultatRecherche.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    idUser = json['id_user'];
+    // idUser = json['id_user'];
     matricule = json['matricule'];
     designation = json['designation'];
     description = json['description'];

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:opassage_app/Page/Professionnel/ListeEspace.dart';
+import 'package:opassage_app/Page/Professionnel/modifEspace.dart';
 import 'package:opassage_app/api/lienglobal.dart';
 import 'package:opassage_app/utilities/color.dart';
 import 'package:opassage_app/widget/buildImage.dart';
@@ -14,7 +15,17 @@ class DetailEspace extends StatefulWidget {
   final String montant;
   final String description;
   final String localisation;
+  final String commune;
   final String matricule;
+  final String disponibilite;
+  final String image_one;
+  final String image_two;
+  final String image_thee;
+  final String image_for;
+  final String image_five;
+  final String categorie;
+  final String latitude;
+  final String longitude;
   DetailEspace(
       {Key? key,
       required this.matricule,
@@ -22,7 +33,17 @@ class DetailEspace extends StatefulWidget {
       required this.montant,
       required this.description,
       required this.localisation,
-      required this.id})
+      required this.commune,
+      required this.id,
+      required this.image_one,
+      required this.image_two,
+      required this.image_thee,
+      required this.image_for,
+      required this.image_five,
+      required this.categorie,
+      required this.latitude,
+      required this.longitude,
+      required this.disponibilite})
       : super(key: key);
 
   @override
@@ -256,12 +277,17 @@ class _DetailEspaceState extends State<DetailEspace> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                onPressed: () {
-                  /* setState(() {
-                          chargement = true;
-                        });
-                        _register(); */
-                },
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ModifEspace(
+                              id: widget.id,
+                              description: widget.description,
+                              montant: widget.montant,
+                              name: widget.name,
+                              localisation: widget.localisation,
+                              matricule: widget.matricule,
+                            ))),
                 padding: EdgeInsets.all(10.0),
                 color: violet,
                 textColor: Color.fromRGBO(255, 255, 255, 1),

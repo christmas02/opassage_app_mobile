@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:opassage_app/Page/Connexion/forgetpassword.dart';
 import 'package:opassage_app/api/lienglobal.dart';
-import 'package:opassage_app/main.dart';
+
 import 'package:opassage_app/utilities/color.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../main.dart';
+import 'forgetpassword.dart';
 
 class Connexion extends StatefulWidget {
   Connexion({Key? key}) : super(key: key);
@@ -28,19 +30,71 @@ class _ConnexionState extends State<Connexion> {
 
     final response =
         await dio.post('${lien}/authentification/login', data: data);
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    localStorage.setString('name', response.data['user']['name']);
-    localStorage.setInt('id', response.data['user']['id']);
-    localStorage.setString('email', response.data['user']['email']);
-    localStorage.setInt('role', response.data['role']);
+    /*  */
+    print(response.data);
 
     if (response.data['statu'] == 1) {
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.setString('name', response.data['user']['name']);
+      localStorage.setInt('id', response.data['user']['id']);
+      localStorage.setString('email', response.data['user']['email']);
+      localStorage.setInt('role', response.data['role']);
       setState(() {
         chargement = false;
       });
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyHomePage()));
-    } else {}
+      showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 100,
+              color: Colors.blue,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(
+                      'connexion faite avec succès',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage()));
+                      },
+                      child: Text('ok'),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+    } else {
+      showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 100,
+              color: Colors.red,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(
+                      ' echec !!! veuillez verifier les informations renseignées',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+    }
   }
 
   @override
@@ -79,6 +133,7 @@ class _ConnexionState extends State<Connexion> {
               Padding(
                 padding: EdgeInsets.all(15),
                 child: TextFormField(
+                  obscureText: true,
                   controller: _passwordController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(

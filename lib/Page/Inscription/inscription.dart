@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:opassage/Page/Connexion/connexion.dart';
-import 'package:opassage/Page/recherche.dart';
-import 'package:opassage/api/lienglobal.dart';
-import 'package:opassage/main.dart';
-import 'package:opassage/utilities/color.dart';
+import 'package:opassage_app/Page/Connexion/connexion.dart';
+import 'package:opassage_app/api/lienglobal.dart';
+import 'package:opassage_app/utilities/color.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Inscription extends StatefulWidget {

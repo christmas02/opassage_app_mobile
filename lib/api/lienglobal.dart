@@ -1,4 +1,4 @@
 import 'package:dio/dio.dart';
 
-var lien = 'http://oppassage.pascci.ci/api';
+var lien = 'http://opassage.net/api';
 var dio = Dio();

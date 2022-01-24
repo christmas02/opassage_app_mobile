@@ -122,7 +122,7 @@ class _DetailsState extends State<Details> {
                     Icons.alarm,
                   ),
                   Text(
-                    '09h00-22h00',
+                    '',
                     style: TextStyle(
                         color: violet,
                         fontSize: 20,

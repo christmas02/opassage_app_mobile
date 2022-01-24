@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:opassage_app/Page/scan.dart';
 import 'package:opassage_app/api/lienglobal.dart';
 import 'package:opassage_app/utilities/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Reservation extends StatefulWidget {
   Reservation({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class _ReservationState extends State<Reservation> {
   var test1;
   loadAssignationdata() async {
     var response = await dio.get(
-      'http://opassage.impactafric.com/api/liste_espace_default',
+      '${lien}/liste_espace_default',
     );
 
     var test = response.data['data'];
@@ -26,10 +27,24 @@ class _ReservationState extends State<Reservation> {
     print(_list);
   }
 
+  //Liste reservation
+  loadReservation() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var id = localStorage.getInt('id');
+    var data = {
+      'id': id,
+    };
+
+    var response =
+        await dio.post('${lien}/liste_reservation_utilisateur', data: data);
+    print(response.data);
+  }
+
   @override
   void initState() {
     super.initState();
-    loadAssignationdata();
+    //loadAssignationdata();
+    loadReservation();
   }
 
   @override
@@ -44,11 +59,11 @@ class _ReservationState extends State<Reservation> {
           backgroundColor: Colors.transparent,
           centerTitle: true,
           elevation: 0,
-          title: Text('Liste des reservations',
+          title: Text('Liste des réservations',
               style: TextStyle(color: Colors.black)),
         ),
         body: Container(
-            child: ListView(
+            /*  child: ListView(
           children: [
             Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -154,6 +169,7 @@ class _ReservationState extends State<Reservation> {
               ),
             ),
           ],
-        )));
+        ) */
+            ));
   }
 }

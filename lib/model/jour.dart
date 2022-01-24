@@ -1,7 +1,7 @@
 class Jour {
   int? id;
   String? libelle;
-  int? jours;
+  String? jours;
   String? createdAt;
   String? updatedAt;
 

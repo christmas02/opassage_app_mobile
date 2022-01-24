@@ -4,6 +4,7 @@ import 'package:opassage_app/Page/Professionnel/detail/detailEspace.dart';
 import 'package:opassage_app/Page/profil.dart';
 import 'package:opassage_app/api/lienglobal.dart';
 import 'package:opassage_app/utilities/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListEspace extends StatefulWidget {
   ListEspace({Key? key}) : super(key: key);
@@ -14,11 +15,20 @@ class ListEspace extends StatefulWidget {
 
 class _ListEspaceState extends State<ListEspace> {
   var dio = Dio();
+  var name;
+  var id;
+  var role;
 
   var listChmabreHeure = [];
   ListChambreHeure() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    setState(() {
+      name = localStorage.getString('name');
+      id = localStorage.getInt('id');
+      role = localStorage.getInt('role');
+    });
     var data = {
-      'id': 1,
+      'id': id,
     };
     final response =
         await dio.post('${lien}/liste_espace_professionnel', data: data);
@@ -26,6 +36,8 @@ class _ListEspaceState extends State<ListEspace> {
     setState(() {
       listChmabreHeure = response.data['data'];
     });
+    print('--------------id');
+    print(response.data['data']);
   }
 
 //Liste categorie
@@ -92,11 +104,13 @@ class _ListEspaceState extends State<ListEspace> {
               var t = listChmabreHeure.where((oldValue) =>
                   _listCategorie[index].toString() ==
                   (oldValue['categorie'].toString()));
-              print(_listCategorie[0]);
+              // print(_listCategorie[0]);
 
               return t.length > 0
                   ? ListView(
                       children: t.map((entry) {
+                      print('jdkbkdd');
+                      print(entry);
                       var w = Container(
                         width: 450,
                         child: Padding(
@@ -121,8 +135,9 @@ class _ListEspaceState extends State<ListEspace> {
                                               "assets/images/chambre.jpg"),
                                           fit: BoxFit.cover)),
                                 ),
-                                title: Text(entry['designation']),
-                                subtitle: Text(entry['localisation']),
+                                title: Text(entry['designation'].toString()),
+                                subtitle:
+                                    Text(entry['localisation'].toString()),
                                 trailing: Wrap(
                                   spacing: 12, // space between two icons
                                   children: <Widget>[
@@ -139,21 +154,41 @@ class _ListEspaceState extends State<ListEspace> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     DetailEspace(
-                                                      id: entry['id'],
-                                                      description:
-                                                          entry['description']
-                                                              .toString(),
-                                                      montant: entry['montant']
-                                                          .toString(),
-                                                      name: entry['designation']
-                                                          .toString(),
-                                                      localisation:
-                                                          entry['localisation']
-                                                              .toString(),
-                                                      matricule:
-                                                          entry['matricule']
-                                                              .toString(),
-                                                    )));
+                                                        latitude: entry[
+                                                            'latitude'],
+                                                        longitude: entry[
+                                                            'longitude'],
+                                                        image_one:
+                                                            entry['img_one'],
+                                                        image_two:
+                                                            entry['img_two'],
+                                                        image_thee:
+                                                            entry['img_thee'],
+                                                        image_for: entry['for'],
+                                                        image_five:
+                                                            entry['five'],
+                                                        disponibilite: entry[
+                                                            'disponibilite'],
+                                                        commune:
+                                                            entry['commune'],
+                                                        id: entry['id'],
+                                                        description:
+                                                            entry['description']
+                                                                .toString(),
+                                                        montant: entry['montant']
+                                                            .toString(),
+                                                        name:
+                                                            entry['designation']
+                                                                .toString(),
+                                                        localisation: entry[
+                                                                'localisation']
+                                                            .toString(),
+                                                        matricule:
+                                                            entry['matricule']
+                                                                .toString(),
+                                                        categorie:
+                                                            entry['categorie']
+                                                                .toString())));
                                       },
                                       child: Icon(Icons.remove_red_eye_sharp),
                                     ), // icon-2

@@ -6,7 +6,7 @@ import 'package:opassage_app/model/resultatrecherchemodele.dart';
 import 'package:opassage_app/utilities/color.dart';
 
 class ListeRecherche extends StatefulWidget {
-  final list;
+  List<ResultatRecherche> list;
   ListeRecherche({Key? key, required this.list}) : super(key: key);
 
   @override

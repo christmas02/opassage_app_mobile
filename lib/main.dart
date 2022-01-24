@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async' show Timer;
 
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();

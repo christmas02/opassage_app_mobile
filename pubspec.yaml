@@ -47,7 +47,7 @@ dependencies:
   simple_time_range_picker: ^0.0.3
   cool_alert: ^1.1.0
   google_maps_flutter: 
-  geolocator: ^7.7.1 
+  geolocator: 
   location:
   geocoding:
   device_information: ^0.0.4
@@ -56,6 +56,15 @@ dependencies:
   my_barcode_scanner: ^0.0.1
   flutter_launcher_icons:
   rflutter_alert:
+  multi_image_picker2:
+  flutter_easyloading:
+  file_picker: 
+
+
+flutter_icons:
+  image_path: "assets/images/iconeapp.jpg" 
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:
@@ -73,8 +82,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+     -  assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

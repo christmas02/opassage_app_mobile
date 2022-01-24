@@ -23,6 +23,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  var favoris = false;
+
   late GoogleMapController mapController;
 
   var categorie;
@@ -44,11 +46,12 @@ class HomePageState extends State<HomePage> {
   var test1;
   loadAssignationdata() async {
     var response = await dio.get(
-      '${lien}/api/liste_espace_default',
+      '${lien}/liste_espace_default',
     );
 
     var test = response.data['data'];
     print('----------------bah je comprend pas --------------');
+
     setState(() {
       _list = test;
     });
@@ -95,6 +98,7 @@ class HomePageState extends State<HomePage> {
     };
     final response = await dio.post('${lien}/filter', data: data);
     var test = response.data['data'];
+    print(response.data);
     setState(() {
       for (var i in test) {
         _listresltat.add(ResultatRecherche.fromJson(i));
@@ -248,6 +252,7 @@ class HomePageState extends State<HomePage> {
       '${lien}/liste_espace_default',
     );
     var test = response.data['data'];
+    print(test);
     setState(() {
       for (var i in test) {
         Espace.add(Espacemap.fromJson(i));
@@ -882,11 +887,35 @@ class HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Icon(
+                                          /*  Icon(
                                             Icons.favorite,
                                             color: violet,
                                             size: 30,
-                                          )
+                                          ) */
+
+                                          IconButton(
+                                              onPressed: () async {
+                                                /* var dio = Dio();
+                                                var data = {
+                                                  "id_user": "15",
+                                                  "id_espace": "33"
+                                                };
+
+                                                final response = await dio.post(
+                                                    '${lien}/favoris',
+                                                    data: data); */
+
+                                                setState(() {
+                                                  favoris = !favoris;
+                                                });
+                                              },
+                                              icon: Icon(
+                                                Icons.favorite,
+                                                color: favoris == false
+                                                    ? Colors.white
+                                                    : violet,
+                                                size: 30,
+                                              ))
                                         ],
                                       ),
                                     ),

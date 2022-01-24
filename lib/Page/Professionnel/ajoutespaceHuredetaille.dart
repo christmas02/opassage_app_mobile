@@ -1,4 +1,4 @@
-import 'dart:ffi';
+/* import 'dart:ffi';
 import 'dart:io';
 import 'package:opassage_app/api/lienglobal.dart';
 import 'package:opassage_app/model/jour.dart';
@@ -47,7 +47,7 @@ class _AjoutEspaceState extends State<AjoutEspace> {
   File? image;
   loadCommune() async {
     var response = await dio.get(
-      'http://opassage.impactafric.com/api/liste_commune',
+      'http://oppassage.pascci.ci/api/liste_commune',
     );
     var test = response.data['data'];
     setState(() {
@@ -57,7 +57,7 @@ class _AjoutEspaceState extends State<AjoutEspace> {
 
   loadJour() async {
     var response = await dio.get(
-      'http://opassage.impactafric.com/api/liste_jours',
+      'http://oppassage.pascci.ci/api/liste_jours',
     );
     var test = response.data['data'];
     setState(() {
@@ -147,7 +147,7 @@ class _AjoutEspaceState extends State<AjoutEspace> {
           Padding(
             padding: EdgeInsets.only(left: 0, right: 0),
             child: Container(
-              decoration:
+                /* decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(30)),
               margin: EdgeInsets.all(10),
               child: DropdownButtonHideUnderline(
@@ -172,8 +172,8 @@ class _AjoutEspaceState extends State<AjoutEspace> {
                     commune = value!;
                   });
                 },
-              )),
-            ),
+              )) */
+                ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 15, bottom: 5, left: 15, right: 15),
@@ -296,7 +296,7 @@ class _AjoutEspaceState extends State<AjoutEspace> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          ListView(
+          /*   ListView(
             children: values.keys.map((String key) {
               return new CheckboxListTile(
                 title: new Text(key),
@@ -308,7 +308,7 @@ class _AjoutEspaceState extends State<AjoutEspace> {
                 },
               );
             }).toList(),
-          ),
+          ) */
           RaisedButton(
             child: Text(
               " Get Selected Checkbox Items ",
@@ -341,3 +341,4 @@ class _AjoutEspaceState extends State<AjoutEspace> {
     );
   }
 }
+ */
